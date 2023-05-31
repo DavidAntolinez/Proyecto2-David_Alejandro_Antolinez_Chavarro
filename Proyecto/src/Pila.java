@@ -143,7 +143,7 @@ public class Pila {
                 System.out.println(
                         "El juego se trata de organizar todos los 1 en la pila de la izquierda y todos los 2 en la de la derecha \npara ello puedes agarrar los numeros que estan en el tope de las pilas\n y moverlos a otras pilas, los 0 significan que no hay numero con dos condiciones, 1.No puedes pasar un numero a una pila llena,\n 2.Solo puedes pasar un numero a otra pila si y solo si la pila esta vacia o el mismo numero esta en el tope de esa pila.");
             }
-            Boolean ganar = false;
+            Boolean ganar;
             String R;
             do {
                 System.out.println(
@@ -189,9 +189,7 @@ public class Pila {
                 } else {
                     System.out.println("Al momento de ingresar su movimiento imite al ejemplo");
                 }
-                if (P1.PilaLlena() && P3.PilaLlena()) {
-                    ganar = true;
-                }
+                ganar = Ganar(P1, P2, P3);
                 System.out.println("\033[H\033[2J");
                 System.out.flush();
             } while (!ganar && !R.equals("SoyTonto"));
@@ -245,6 +243,40 @@ public class Pila {
         return s;
     }
 
+    Boolean Ganar(Pila p1, Pila p2, Pila p3) {
+        Pila aux1 = new Pila(p1.Tope + 1);
+        Pila aux2 = new Pila(p2.Tope + 1);
+        Pila aux3 = new Pila(p3.Tope + 1);
+        aux1.CopiarPila(p1);
+        aux2.CopiarPila(p2);
+        aux3.CopiarPila(p3);
+        Boolean igual1, igual2, igual3, gano = false;
+        igual1 = aux1.Compprobacion();
+        igual2 = aux2.Compprobacion();
+        igual3 = aux3.Compprobacion();
+        if (igual1 == true && igual2 == true && igual3 == false) {
+            gano = true;
+        } else if (igual1 == true && igual2 == false && igual3 == true) {
+            gano = true;
+        } else if (igual1 == false && igual2 == true && igual3 == true) {
+            gano = true;
+        }
+        return gano;
+    }
+
+    Boolean Compprobacion() {
+        int uno = 0, dos = 0;
+        while (!PilaVacia()) {
+            int d = DesApilar();
+            if (d == 1) {
+                uno++;
+            } else {
+                dos++;
+            }
+        }
+        return uno == 4 || dos == 4;
+    }
+
     Boolean MIlegal(Pila p) {
         Boolean t;
         if (p.PilaVacia()) {
@@ -264,6 +296,5 @@ public class Pila {
             Apilar(d);
         }
     }
-    
 
 }
